@@ -86,3 +86,9 @@ export type InvoiceForm = {
   amount: number;
   status: 'pending' | 'paid';
 };
+
+export type Lawyer = {
+  id: string;
+  personal_email: string;
+  bar_number: string;
+};

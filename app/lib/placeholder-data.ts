@@ -144,4 +144,11 @@ const revenue = [
   { month: 'Dec', revenue: 4800 },
 ];
 
-export { users, customers, invoices, revenue };
+const lawyers = [
+    {
+        name: 'Joe',
+        bar_number: 'Bar #12345',
+        personal_email: 'joe.scott@joescott.com'
+    },
+];
+export { users, customers, invoices, revenue, lawyers };

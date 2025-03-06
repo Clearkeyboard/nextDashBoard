@@ -54,6 +54,31 @@ async function seedInvoices() {
 
   return insertedInvoices;
 }
+
+async function seedLawyersBeta() {
+  await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS lawyersBeta (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      personal_email VARCHAR(255) NOT NULL,
+      bar_number VARCHAR(255) NOT NULL
+      );
+    `;
+  
+    const insertedLawyers = await Promise.all(
+      lawyers.map(
+        (lawyer) => sql`
+        INSERT INTO lawyersBeta (name, personal_email, bar_number)
+        VALUES (${lawyer.name}, ${lawyer.personal_email}, ${lawyer.bar_number})
+        ON CONFLICT (id) DO NOTHING;
+        `,
+      ),
+    );
+
+    return insertedLawyers;
+}
 async function seedCustomers() {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
@@ -103,7 +128,7 @@ async function seedRevenue() {
 export async function GET() {
   try {
     const result = await sql.begin((sql) => [
-
+      seedLawyersBeta()
     ]);
 
     return Response.json({ message: 'Database seeded successfully' });

@@ -1,12 +1,12 @@
 'use client';
 import * as XLSX from 'xlsx';
-import {useState} from 'react';
+import {ChangeEvent, useState} from 'react';
 import { uploadLawyers } from '../lib/lawyerplaceholder';
+import { string } from 'zod';
 export default function Page() {
-
-    const [fileName, setFileName] = useState(null);
-    const handleFile = async (e) => {
-
+    const [fileName, setFileName] = useState<any | null>(null);
+    const handleFile = async (e: ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files) return
         const file = e.target.files[0];
         setFileName(file.name);
         const data = await file.arrayBuffer();

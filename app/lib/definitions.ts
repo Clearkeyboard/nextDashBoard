@@ -89,6 +89,7 @@ export type InvoiceForm = {
 
 export type Lawyer = {
   id: string;
+  name: string;
   personal_email: string;
   bar_number: string;
 };

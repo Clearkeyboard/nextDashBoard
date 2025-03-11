@@ -160,6 +160,21 @@ export async function fetchCustomerPages(query: string) {
     throw new Error('Failed to fetch total number of customers.');
   }
 }
+
+export async function fetchLawyerPages(query: string) {
+  try {
+    const data = await sql` SELECT COUNT(*)
+    FROM lawyersbeta WHERE
+    name ILIKE ${`%${query}%`} OR
+    personal_email ILIKE ${`%${query}%`}  `;
+    const totalPages = Math.ceil(Number(data[0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch(error) {
+    console.log('Database Error:', error);
+    throw new Error('Failed to fetch total number of lawyers.');
+  }
+}
+
 export async function fetchInvoiceById(id: string) {
   try {
     const data = await sql<InvoiceForm[]>`
@@ -232,5 +247,25 @@ export async function fetchFilteredCustomers(query: string, currentPage: number,
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch customer table.');
+  }
+}
+
+export async function fetchFilteredLawyers(query:string, currentPage: number,) {
+  const offset = (currentPage - 1 ) * ITEMS_PER_PAGE;
+  try {
+    const data = await sql<Lawyer[]>`
+    SELECT 
+    id,
+    name,
+    personal_email, 
+    bar_number FROM lawyersbeta where 
+    name ILIKE ${`%${query}%`} OR personal_email ILIKE ${`%${query}%`}
+    ORDER BY name ASC LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `;
+
+    return data;
+  } catch (error) {
+    console.log('Database Error:', error);
+    throw new Error('Failed to fetch lawyer table.');
   }
 }
